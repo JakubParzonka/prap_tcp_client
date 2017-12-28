@@ -31,8 +31,7 @@ int main(int argc, char **argv) {
         perror("getHostByName error ");
         exit(1);
     }
-
-    //setting things to 0
+//  setting things to 0
     bzero((char *) &serv_addr, sizeof(serv_addr));
     bcopy(server->h_addr, (char *) &serv_addr.sin_addr.s_addr, (size_t) server->h_length);
     portNumber = atoi(argv[2]);
@@ -45,12 +44,24 @@ int main(int argc, char **argv) {
     } else {
         puts("Connection established.");
     }
-    buffer = "Hello";
-    x = write(socketIsAwesome, buffer, 256);
+
+//  getting user input
+    printf("Input your numbers: ");
+    fgets(buffer, buffer_size, stdin);
+
+    x = write(socketIsAwesome, buffer, buffer_size);
     if (x < 0) {
         perror("write operation error ");
         exit(1);
     }
+
+    x = read(socketIsAwesome, buffer, buffer_size);
+    if (x < 0) {
+        perror("read operation error ");
+        exit(1);
+    }
+
+    printf("Message from server: %s\n", buffer);
 
 
     return 0;

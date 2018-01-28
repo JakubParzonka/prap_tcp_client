@@ -44,25 +44,26 @@ int main(int argc, char **argv) {
     } else {
         puts("Connection established.");
     }
+    while (1) {
 
 //  getting user input
-    printf("Input your numbers: ");
-    fgets(buffer, buffer_size, stdin);
+        printf("Input your numbers: ");
+        fgets(buffer, buffer_size, stdin);
 
-    x = write(socketIsAwesome, buffer, buffer_size);
-    if (x < 0) {
-        perror("write operation error ");
-        exit(1);
+        x = write(socketIsAwesome, buffer, buffer_size);
+        if (x < 0) {
+            perror("write operation error ");
+            exit(1);
+        }
+
+        x = read(socketIsAwesome, buffer, buffer_size);
+        if (x < 0) {
+            perror("read operation error ");
+            exit(1);
+        }
+
+        printf("Message from server: %s\n", buffer);
     }
-
-    x = read(socketIsAwesome, buffer, buffer_size);
-    if (x < 0) {
-        perror("read operation error ");
-        exit(1);
-    }
-
-    printf("Message from server: %s\n", buffer);
-
 
     return 0;
 }

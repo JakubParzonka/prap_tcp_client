@@ -18,9 +18,11 @@ int main(int argc, char **argv) {
     struct sockaddr_in serv_addr;
     struct hostent *server;
     char *buffer;
+    char *incomingBuffer;
     ssize_t x;
 
-    buffer = (char *) malloc(buffer_size);
+    buffer = (char *) malloc(0);
+    incomingBuffer = (char *) malloc(4096);
 
     socketIsAwesome = socket(AF_INET, SOCK_STREAM, 0);
     if (socketIsAwesome < 0) perror("creating socket operation error ");
@@ -50,19 +52,22 @@ int main(int argc, char **argv) {
         printf("Input your numbers: ");
         fgets(buffer, buffer_size, stdin);
 
+        printf("Message to server: %s\n", buffer);
+
         x = write(socketIsAwesome, buffer, buffer_size);
         if (x < 0) {
             perror("write operation error ");
             exit(1);
         }
-
-        x = read(socketIsAwesome, buffer, buffer_size);
+        free(buffer);
+        x = read(socketIsAwesome, incomingBuffer, 4096);
         if (x < 0) {
             perror("read operation error ");
             exit(1);
         }
 
-        printf("Message from server: %s\n", buffer);
+        printf("Message from server: %s\n", incomingBuffer);
+        free(incomingBuffer);
     }
 
     return 0;
